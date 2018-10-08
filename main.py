@@ -1,10 +1,12 @@
 import random
 
+
 class Words(object):
     def __init__(self, path="words.txt"):
         self.path = path
         self.fp = None
         self.word_list = []
+        self.temp_word_list = []
         self.init_fp()
 
     def init_fp(self):
@@ -20,7 +22,21 @@ class Words(object):
         print("1.Record your words.")
         print("2.Get K words.")
         print("3.Exit.")
-        
+
+    def restore(self):
+        self.word_list = self.temp_word_list
+
+    def filter(self, type):
+        if type != 'A':
+            type += '\n'
+            self.temp_word_list = self.word_list
+            new_word_list = []
+            for line in self.word_list:
+                if line[2] == type:
+                    new_word_list.append(line)
+            self.word_list = new_word_list
+            print(self.word_list)
+
     def get_words(self, k, sort_method):
         print(self.word_list)
         now_list = sort_method(self.word_list)[:k]
@@ -116,6 +132,9 @@ if __name__ == '__main__':
             print(words)
             wordRecorder.write_words(words)
         elif select == '2':
+            print("What type of words do you want to get? ")
+            word_type = input("L for listening, S for speaking, W for writing, R for reading and A for all: ")
+            wordRecorder.filter(word_type)
             k = int(input("Input the number of the words you want to get: "))
             sort_method = method.select()
             now_word = wordRecorder.get_words(k, sort_method)
@@ -123,6 +142,8 @@ if __name__ == '__main__':
                 for line in now_word:
                     print(line)
                     fp.write(line + '\n')
+            if word_type != 'A':
+                wordRecorder.restore()
         elif select == '3':
             shut_down_signal = True
         else:
