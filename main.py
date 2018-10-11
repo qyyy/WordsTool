@@ -14,7 +14,7 @@ class Words(object):
         self.fp.seek(0)
         self.word_list = []
         for line in self.fp:
-            self.word_list.append(list(line.split(' ')))
+            self.word_list.append(list(line.split('\t')))
 
     @staticmethod
     def print_message():
@@ -119,13 +119,13 @@ if __name__ == '__main__':
         wordRecorder.print_message()
         select = input()
         if select == '1':
-            print("Each line combines with the word itself, the date and the tag of it.")
+            print("Each line combines with the word itself, the date and the tag of it. Split them with '\\t'.")
             print("\"#\" means the end of your input.")
             word = input("Now input your words!\n")
             words = []
             while word != '#':
                 word += '\n'
-                while len(word.split(' ')) != 3:
+                while len(word.split('\t')) != 3:
                     word = input("Input error! Check it and input again!")
                 words.append(word)
                 word = input()
