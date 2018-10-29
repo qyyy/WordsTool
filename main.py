@@ -37,9 +37,25 @@ class Words(object):
             self.word_list = new_word_list
             print(self.word_list)
 
-    def get_words(self, k, sort_method):
+    def get_words(self, k, sort_method, exact_phrase, is_reversed):
         print(self.word_list)
         now_list = sort_method(self.word_list)[:k]
+        print(now_list)
+        if exact_phrase:
+            words = []
+            phrases = []
+            for word in now_list:
+                if ' ' in word:
+                    phrases.append(word)
+                else:
+                    words.append(word)
+            if is_reversed:
+                words = words[::-1]
+                phrases = phrases[::-1]
+                is_reversed = False
+            now_list = words + phrases
+        if is_reversed:
+            now_list = now_list[::-1]
         print(now_list)
         return now_list
 
@@ -111,6 +127,13 @@ class SortMethod(object):
         return res
 
 
+def check_input(source, target_list):
+    if source in target_list:
+        return True
+    print("Input error! Please check and input again!")
+    return False
+    
+
 if __name__ == '__main__':
     wordRecorder = Words()
     method = SortMethod()
@@ -118,6 +141,8 @@ if __name__ == '__main__':
     while not shut_down_signal:
         wordRecorder.print_message()
         select = input()
+        while not check_input(select, ['1', '2', '3']):
+            select = input("Input again: ")
         if select == '1':
             print("Each line combines with the word itself, the date and the tag of it. Split them with '\\t'.")
             print("\"#\" means the end of your input.")
@@ -134,18 +159,23 @@ if __name__ == '__main__':
         elif select == '2':
             print("What type of words do you want to get? ")
             word_type = input("L for listening, S for speaking, W for writing, R for reading and A for all: ")
+            while not check_input(word_type, ['L', 'S', 'W', 'R', 'A']):
+                word_type = input("Input again: ")
             wordRecorder.filter(word_type)
             k = int(input("Input the number of the words you want to get: "))
+            exact_phrase = input("Do you want to exact the phrase solely? Y/N: ")
+            while not check_input(exact_phrase, ['Y', 'y', 'N', 'n']):
+                exact_phrase = input("Input again: ")
+            is_reversed = input("Do you want to reverse the list? Y/N: ")
+            while not check_input(exact_phrase, ['Y', 'y', 'N', 'n']):
+                is_reversed = input("Input again: ")
             sort_method = method.select()
-            now_word = wordRecorder.get_words(k, sort_method)
+            now_word = wordRecorder.get_words(k, sort_method, (exact_phrase == 'Y' or exact_phrase == 'y'), (is_reversed == 'Y' or is_reversed == 'y'))
             with open("result.txt", 'w') as fp:
                 for line in now_word:
-                    print(line)
                     fp.write(line + '\n')
             if word_type != 'A':
                 wordRecorder.restore()
-        elif select == '3':
-            shut_down_signal = True
         else:
-            print("Input error! You can only input 1,2 or 3!")
+            shut_down_signal = True
     wordRecorder.save_file()
