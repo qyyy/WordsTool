@@ -38,9 +38,7 @@ class Words(object):
             print(self.word_list)
 
     def get_words(self, k, sort_method, exact_phrase, is_reversed):
-        print(self.word_list)
         now_list = sort_method(self.word_list)[:k]
-        print(now_list)
         if exact_phrase:
             words = []
             phrases = []
@@ -56,7 +54,6 @@ class Words(object):
             now_list = words + phrases
         if is_reversed:
             now_list = now_list[::-1]
-        print(now_list)
         return now_list
 
     def write_words(self, word_list):
@@ -110,7 +107,8 @@ class SortMethod(object):
         keys.sort(reverse=True)
         res = []
         for key in keys:
-            res.extend(frequency_to_word[key])
+            for word in frequency_to_word[key]:
+                res.append(word + '\t' + str(key))
         return res
 
     def sort_by_dictionary_order(self, word_list):
@@ -174,6 +172,7 @@ if __name__ == '__main__':
             with open("result.txt", 'w') as fp:
                 for line in now_word:
                     fp.write(line + '\n')
+                    print(line)
             if word_type != 'A':
                 wordRecorder.restore()
         else:
