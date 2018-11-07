@@ -1,11 +1,11 @@
 import random
-import argparse
+
+from settings import my_settings
 
 
 class Words(object):
-    def __init__(self, path="words.txt"):
-        print(path)
-        self.path = path
+    def __init__(self):
+        self.path = my_settings["input_dir"]
         self.fp = None
         self.word_list = []
         self.temp_word_list = []
@@ -17,16 +17,6 @@ class Words(object):
         self.word_list = []
         for line in self.fp:
             self.word_list.append(list(line.split('\t')))
-
-    @staticmethod
-    def print_message():
-        print("What do you want to do?")
-        print("1.Record your words.")
-        print("2.Get K words.")
-        print("3.Exit.")
-
-    def restore(self):
-        self.word_list = self.temp_word_list
 
     def filter(self, type):
         if type != 'A':
@@ -58,27 +48,18 @@ class Words(object):
             now_list = now_list[::-1]
         return now_list
 
-    def write_words(self, word_list):
-        self.fp.writelines(word_list)
-        self.save_file()
-        self.init_fp()
-
     def save_file(self):
         self.fp.close()
 
 
 class SortMethod(object):
     def select(self):
-        print("1.Sort by frequency.")
-        print("2.Sort by date.")
-        print("3.Sort by dictionary order.")
-        print("4.Random.")
-        choice = input()
-        if choice == '1':
+        choice = my_settings["sort_method"]
+        if choice == "frequency":
             method = self.sort_by_frequency
-        elif choice == '2':
+        elif choice == "date":
             method = self.sort_by_date
-        elif choice == '3':
+        elif choice == "dictionary order":
             method = self.sort_by_dictionary_order
         else:
             method = self.random_sort
@@ -125,65 +106,19 @@ class SortMethod(object):
         res = list(set(word_list))
         random.shuffle(res)
         return res
-
-
-def check_input(source, target_list):
-    if source in target_list:
-        return True
-    print("Input error! Please check and input again!")
-    return False
     
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '-I', '--input', type=str, default='words.txt')
-    parser.add_argument('-o', '-O', '--output', type=str, default='result.txt')
-    args = parser.parse_args()
-
-    wordRecorder = Words(path=args.input)
+    wordRecorder = Words()
     method = SortMethod()
 
-    shut_down_signal = False
+    wordRecorder.filter(my_settings["words_type"])
 
-    while not shut_down_signal:
-        wordRecorder.print_message()
-        select = input()
-        while not check_input(select, ['1', '2', '3']):
-            select = input("Input again: ")
-        if select == '1':
-            print("Each line combines with the word itself, the date and the tag of it. Split them with '\\t'.")
-            print("\"#\" means the end of your input.")
-            word = input("Now input your words!\n")
-            words = []
-            while word != '#':
-                word += '\n'
-                while len(word.split('\t')) != 3:
-                    word = input("Input error! Check it and input again!")
-                words.append(word)
-                word = input()
-            print(words)
-            wordRecorder.write_words(words)
-        elif select == '2':
-            print("What type of words do you want to get? ")
-            word_type = input("L for listening, S for speaking, W for writing, R for reading and A for all: ")
-            while not check_input(word_type, ['L', 'S', 'W', 'R', 'A']):
-                word_type = input("Input again: ")
-            wordRecorder.filter(word_type)
-            k = int(input("Input the number of the words you want to get: "))
-            exact_phrase = input("Do you want to exact the phrase solely? Y/N: ")
-            while not check_input(exact_phrase, ['Y', 'y', 'N', 'n']):
-                exact_phrase = input("Input again: ")
-            is_reversed = input("Do you want to reverse the list? Y/N: ")
-            while not check_input(exact_phrase, ['Y', 'y', 'N', 'n']):
-                is_reversed = input("Input again: ")
-            sort_method = method.select()
-            now_word = wordRecorder.get_words(k, sort_method, (exact_phrase == 'Y' or exact_phrase == 'y'), (is_reversed == 'Y' or is_reversed == 'y'))
-            with open(args.output, 'w') as fp:
-                for line in now_word:
-                    fp.write(line + '\n')
-                    print(line)
-            if word_type != 'A':
-                wordRecorder.restore()
-        else:
-            shut_down_signal = True
+    sort_method = method.select()
+    now_word = wordRecorder.get_words(my_settings["words_number"], sort_method, my_settings["exact_phrase"], my_settings["is_reversed"])
+    with open(my_settings["output_dir"], 'w') as fp:
+        for line in now_word:
+            fp.write(line + '\n')
+            print(line)
+
     wordRecorder.save_file()

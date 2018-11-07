@@ -7,10 +7,12 @@
 - 根据你输入的词表输出排好序的词表，你可以用这个词表帮助你背单词。
 ### 如何使用
 #### 交互模式
-1. 运行这个工具：`python3 main.py -i words.txt -o result.txt`。这里面的“-i”表示的是你输入词表的路径，“-o”表示的是输出的词表的路径。
-2. 根据提示输入你的每项配置。
+1. 下载交互模式的代码：`git clone -b interactive https://github.com/qyyy/WordsTool.git`。
+2. 运行这个工具：`python3 main.py -i words.txt -o result.txt`。这里面的“-i”表示的是你输入词表的路径，“-o”表示的是输出的词表的路径。
+3. 根据提示输入你的每项配置。
 #### 数据处理模式
-1. 根据你的需要修改配置文件`settings.py`。
-2. 运行这个工具: `python3 main.py`。
+1. 下载数据处理模式的代码：`git clone https://github.com/qyyy/WordsTool.git`。
+2. 根据你的需要修改配置文件`settings.py`。
+3. 运行这个工具: `python3 main.py`。
 ### 待做清单
 - 支持中文意思，需要使用NLP的方法进行含义的合并。
