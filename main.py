@@ -1,8 +1,10 @@
 import random
+import argparse
 
 
 class Words(object):
     def __init__(self, path="words.txt"):
+        print(path)
         self.path = path
         self.fp = None
         self.word_list = []
@@ -133,9 +135,16 @@ def check_input(source, target_list):
     
 
 if __name__ == '__main__':
-    wordRecorder = Words()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '-I', '--input', type=str, default='words.txt')
+    parser.add_argument('-o', '-O', '--output', type=str, default='result.txt')
+    args = parser.parse_args()
+
+    wordRecorder = Words(path=args.input)
     method = SortMethod()
+
     shut_down_signal = False
+
     while not shut_down_signal:
         wordRecorder.print_message()
         select = input()
@@ -169,7 +178,7 @@ if __name__ == '__main__':
                 is_reversed = input("Input again: ")
             sort_method = method.select()
             now_word = wordRecorder.get_words(k, sort_method, (exact_phrase == 'Y' or exact_phrase == 'y'), (is_reversed == 'Y' or is_reversed == 'y'))
-            with open("result.txt", 'w') as fp:
+            with open(args.output, 'w') as fp:
                 for line in now_word:
                     fp.write(line + '\n')
                     print(line)
