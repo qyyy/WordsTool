@@ -11,8 +11,9 @@
 2. 运行这个工具：`python3 main.py -i words.txt -o result.txt`。这里面的“-i”表示的是你输入词表的路径，“-o”表示的是输出的词表的路径。
 3. 根据提示输入你的每项配置。
 #### 数据处理模式
-1. 下载数据处理模式的代码：`git clone https://github.com/qyyy/WordsTool.git`。
-2. 根据你的需要修改配置文件`settings.py`。
-3. 运行这个工具: `python3 main.py`。
+1. 准备好你的单词文件. 你必须遵守这个固定的格式:`单词  日期    类别`（**注意这里中间的空格是制表符"\t"，不是空格“\p”**）。“单词”就是这个单词，“日期”表示你录入这个单词的日期，“类别”表示这个单词的类型，包括“A”表示所有单词；“L”表示听力，“R”表示阅读；“S”表示口语；“W”表示写作。你可以参考[wordlist.list](./wordlist.list)来构建你自己的单词文件。
+2. 下载数据处理模式的代码：`git clone https://github.com/qyyy/WordsTool.git`。
+3. 根据你的需要修改配置文件`settings.py`。
+4. 运行这个工具: `python3 main.py`。
 ### 待做清单
 - 支持中文意思，需要使用NLP的方法进行含义的合并。
