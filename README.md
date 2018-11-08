@@ -1,10 +1,10 @@
 ## Introduction
-This tool is aiming for memorize and collect English words more efficient.
-I use it to prepare my TOEFL Exam. You can also use it for your other English exams.
+This tool aims at helping people to memorize or collect English words more efficiently.
+I use it to prepare for my TOEFL Exam. You can also use it for your other English exams.
 The tool has the following functions:
 - Record a new word.
-- Sort the words according to frequency, date and dictionary order. Also just random.
-- Produce an output file with the words in the order you want, you can use this to repeat these words.
+- Sort the words according to frequency, date or dictionary order. Also just random.
+- Produce an output file with the words in the order you want, you can use the output to repeat these words.
 ### How to use it
 #### For interactive mode
 1. Clone the interactive mode code: `git clone -b interactive https://github.com/qyyy/WordsTool.git`.
