@@ -16,15 +16,15 @@ class Words(object):
         self.fp.seek(0)
         self.word_list = []
         for line in self.fp:
+            line = line.strip()
             self.word_list.append(list(line.split('\t')))
 
     def filter(self, type):
-        if type != 'A':
-            type += '\n'
+        if 'A' not in type:
             self.temp_word_list = self.word_list
             new_word_list = []
             for line in self.word_list:
-                if line[2] == type:
+                if line[2] in type:
                     new_word_list.append(line)
             self.word_list = new_word_list
             print(self.word_list)
